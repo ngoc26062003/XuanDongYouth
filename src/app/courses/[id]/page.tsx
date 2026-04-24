@@ -16,6 +16,7 @@ type CourseVm = {
   description?: string;
   instructor?: string;
   videoUrl?: string;
+  imageUrl?: string;
   lessons: Lesson[];
 };
 
@@ -62,13 +63,13 @@ function normalizeYouTubeEmbedUrl(url: string): string | null {
     if (host.includes("youtu.be")) {
       const id = parsed.pathname.replace("/", "").trim();
       if (!id) return null;
-      return `https://www.youtube.com/embed/${id}`;
+      return `https://www.youtube.com/embed/${id}?autoplay=1`;
     }
 
     if (host.includes("youtube.com")) {
       const id = parsed.searchParams.get("v");
-      if (id) return `https://www.youtube.com/embed/${id}`;
-      if (parsed.pathname.startsWith("/embed/")) return u;
+      if (id) return `https://www.youtube.com/embed/${id}?autoplay=1`;
+      if (parsed.pathname.startsWith("/embed/")) return u.includes("?") ? u + "&autoplay=1" : u + "?autoplay=1";
     }
   } catch {
     return null;
@@ -157,6 +158,10 @@ function toCourseVm(row: Record<string, unknown>): CourseVm {
     toText(row.preview_url).trim() ||
     lessons.find((l) => l.videoUrl)?.videoUrl ||
     undefined;
+  const imageUrl = 
+    toText(row.image_url).trim() || 
+    toText(row.cover_url).trim() || 
+    undefined;
 
   return {
     id: toId(row.id, "unknown"),
@@ -164,6 +169,7 @@ function toCourseVm(row: Record<string, unknown>): CourseVm {
     description,
     instructor,
     videoUrl,
+    imageUrl,
     lessons,
   };
 }
@@ -208,6 +214,16 @@ const mockReviews = [
   { id: 3, user: "Lê Ngọc Điệp", rating: 4, date: "28/02/2026", comment: "Nội dung hay, tuy nhiên phần cuối hơi nhiều thông tin, cần xem đi xem lại vài lần mới nắm hết." }
 ];
 
+const MOCK_VIDEOS = [
+  { id: "c1", title: "Tạo tài khoản Dịch vụ công bằng VNeID", tag: "Tài khoản", views: 1240, duration: "10 phút", imageUrl: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?q=80&w=600&auto=format&fit=crop" },
+  { id: "c2", title: "Thủ tục Đăng ký khai sinh trực tuyến", tag: "Hộ tịch", views: 870, duration: "15 phút", imageUrl: "https://images.unsplash.com/photo-1555252113-d5fc399e5251?q=80&w=600&auto=format&fit=crop" },
+  { id: "c3", title: "Đăng ký kết hôn trên cổng DVC Quốc gia", tag: "Hộ tịch", views: 520, duration: "20 phút", imageUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop" },
+  { id: "c4", title: "Hướng dẫn thanh toán lệ phí an toàn", tag: "Lệ phí", views: 1560, duration: "8 phút", imageUrl: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&auto=format&fit=crop" },
+  { id: "c5", title: "Thanh toán nghĩa vụ tài chính về đất đai", tag: "Đất đai", views: 940, duration: "12 phút", imageUrl: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=80&w=600&auto=format&fit=crop" },
+  { id: "c6", title: "Cấp lại, đổi thẻ BHYT do mất/hỏng", tag: "Bảo hiểm", views: 620, duration: "15 phút", imageUrl: "https://images.unsplash.com/photo-1512413913411-209258957864?q=80&w=600&auto=format&fit=crop" },
+  { id: "c7", title: "Thủ tục xin cấp Phiếu Lý lịch tư pháp", tag: "Khác", views: 3420, duration: "18 phút", imageUrl: "https://images.unsplash.com/photo-1556742031-c6961e85bb06?q=80&w=600&auto=format&fit=crop" }
+];
+
 export default function Page() {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
@@ -216,11 +232,6 @@ export default function Page() {
   const [course, setCourse] = useState<CourseVm | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
-  const [enrolled, setEnrolled] = useState<boolean | null>(null);
-  const [enrollmentId, setEnrollmentId] = useState<string | null>(null);
-  const [enrollBusy, setEnrollBusy] = useState(false);
-  const [progressBusy, setProgressBusy] = useState(false);
-  const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [activeTab, setActiveTab] = useState<'intro' | 'reviews'>('intro');
 
   useEffect(() => {
@@ -230,9 +241,6 @@ export default function Page() {
     async function load() {
       setError(null);
       setCourse(null);
-      setEnrolled(null);
-      setEnrollmentId(null);
-      setEnrollmentProgress(0);
 
       try {
         const res = await supabase
@@ -252,22 +260,14 @@ export default function Page() {
         }
       } catch (err) {
         if (cancelled) return;
-        // DỮ LIỆU MẪU (MOCK DATA) NẾU CHƯA SETUP DATABASE
-        const courseTitles: Record<string, string> = {
-          c1: "Tạo tài khoản Dịch vụ công bằng VNeID",
-          c2: "Thủ tục Đăng ký khai sinh trực tuyến",
-          c3: "Đăng ký kết hôn trên cổng DVC Quốc gia",
-          c4: "Hướng dẫn thanh toán lệ phí an toàn",
-          c5: "Thanh toán nghĩa vụ tài chính về đất đai",
-          c6: "Cấp lại, đổi thẻ BHYT do mất/hỏng",
-          c7: "Thủ tục xin cấp Phiếu Lý lịch tư pháp"
-        };
+        const mock = MOCK_VIDEOS.find(m => m.id === id) || MOCK_VIDEOS[0];
         const vm: CourseVm = {
           id: id as string,
-          title: courseTitles[id as string] || "Hướng dẫn Dịch vụ công",
+          title: mock.title,
           description: "Video hướng dẫn thực hiện thủ tục hành chính trực tuyến tại Cổng Dịch vụ công. Bạn có thể xem từng bước để hoàn thành hồ sơ một cách nhanh chóng và chính xác.",
           instructor: "Tổ Công Nghệ Số Cộng Đồng",
           videoUrl: "https://www.youtube.com/watch?v=dBzERaXwSco&t=1217s",
+          imageUrl: mock.imageUrl,
           lessons: Array.from({ length: 8 }).map((_, i) => ({
             id: `lesson-${i+1}`,
             title: `Bước ${i+1}: ${['Chuẩn bị hồ sơ', 'Đăng nhập hệ thống', 'Điền tờ khai trực tuyến', 'Đính kèm tài liệu', 'Kiểm tra thông tin', 'Thanh toán lệ phí', 'Nộp hồ sơ', 'Tra cứu kết quả'][i]}`,
@@ -278,33 +278,6 @@ export default function Page() {
         setCourse(vm);
         setActiveLessonId(vm.lessons[0]?.id ?? null);
       }
-
-      try {
-        const userRes = await supabase.auth.getUser();
-        if (cancelled) return;
-        const user = userRes.data?.user;
-        if (user) {
-          const enrollRes = await supabase
-            .from("enrollments")
-            .select("id, progress_percent")
-            .eq("user_id", user.id)
-            .eq("course_id", id)
-            .maybeSingle();
-
-          if (!cancelled && enrollRes.data) {
-            const row = enrollRes.data as Record<string, unknown>;
-            const eid = toText(row.id).trim();
-            setEnrollmentId(eid || null);
-            setEnrollmentProgress(toNumber(row.progress_percent) || 0);
-            setEnrolled(true);
-            return;
-          }
-        }
-      } catch (err) {
-        // Bỏ qua lỗi Auth nếu Supabase chưa cấu hình
-      }
-      
-      if (!cancelled) setEnrolled(false);
     }
 
     load().catch(() => {
@@ -328,86 +301,26 @@ export default function Page() {
     return idx >= 0 ? idx : 0;
   }, [course, activeLessonId]);
 
-  const maxUnlockedIndex = useMemo(() => {
-    if (!enrolled || !course) return -1;
-    if (enrollmentProgress >= 100) return course.lessons.length;
-    return Math.floor((enrollmentProgress / 100) * course.lessons.length);
-  }, [enrolled, course, enrollmentProgress]);
-
   const videoUrl = activeLesson?.videoUrl || course?.videoUrl || "";
   const youtubeEmbed = videoUrl ? normalizeYouTubeEmbedUrl(videoUrl) : null;
 
-  async function enrollNow() {
-    if (enrollBusy || !id) return;
-    setEnrollBusy(true);
-
-    try {
-      const userRes = await supabase.auth.getUser();
-      const user = userRes.data?.user;
-      if (user) {
-        const insertRes = await supabase
-          .from("enrollments")
-          .insert({ user_id: user.id, course_id: id })
-          .select("id")
-          .maybeSingle();
-
-        if (!insertRes.error && insertRes.data) {
-          const eid = toText((insertRes.data as Record<string, unknown>).id).trim();
-          setEnrollmentId(eid || null);
-          setEnrolled(true);
-          setEnrollBusy(false);
-          return;
-        }
-      }
-    } catch (err) {}
-
-    // Chế độ Demo (khi Database chưa có)
-    setTimeout(() => {
-      setEnrollmentId("demo-enrollment");
-      setEnrolled(true);
-      setEnrollBusy(false);
-    }, 600);
-  }
-
-  function selectLesson(lessonId: string, index: number) {
-    if (!course || enrolled !== true || !id) return;
-    if (index > maxUnlockedIndex) return; // Khóa, không cho phép click
-    setActiveLessonId(lessonId);
-  }
-
-  async function markLessonComplete() {
-    if (!course || enrolled !== true || !id || progressBusy) return;
-    const currentIndex = course.lessons.findIndex((l) => l.id === activeLessonId);
-    if (currentIndex < 0) return;
-
-    setProgressBusy(true);
-    const nextIndex = currentIndex + 1;
-    const newProgressRaw = Math.max(enrollmentProgress, Math.round((nextIndex / course.lessons.length) * 100));
-    const newProgress = Math.min(newProgressRaw, 100);
-
-    try {
-      if (enrollmentId && enrollmentId !== "demo-enrollment") {
-        await supabase
-          .from("enrollments")
-          .update({
-            progress_percent: newProgress,
-            last_lesson_title: course.lessons[currentIndex].title,
-            last_watched_at: new Date().toISOString(),
-          })
-          .eq("id", enrollmentId);
-      }
-    } catch (err) {}
-
-    setEnrollmentProgress(newProgress);
-    setProgressBusy(false);
-
-    // Mở video tiếp theo nếu chưa hết khóa
-    if (nextIndex < course.lessons.length) {
-      setActiveLessonId(course.lessons[nextIndex].id);
-    }
-  }
+  const recommendedVideos = useMemo(() => {
+    return MOCK_VIDEOS.filter(v => v.id !== id).slice(0, 4);
+  }, [id]);
 
   if (!course && !error) return <Skeleton />;
+
+  // Calculate progress: number of completed lessons (for demo, unlock all)
+  const maxUnlockedIndex = course ? course.lessons.length - 1 : 0;
+  const enrollmentProgress = course && course.lessons.length > 0
+    ? Math.round(((maxUnlockedIndex + 1) / course.lessons.length) * 100)
+    : 0;
+
+  function selectLesson(lessonId: string, index: number) {
+    if (index <= maxUnlockedIndex) {
+      setActiveLessonId(lessonId);
+    }
+  }
 
   return (
     <div className="px-6 py-8 max-w-7xl mx-auto">
@@ -429,71 +342,7 @@ export default function Page() {
         </div>
       ) : null}
 
-      {course && enrolled === false ? (
-        <div className="bg-white rounded-3xl border border-rose-100 overflow-hidden shadow-xl shadow-rose-100/20 mb-8">
-          <div className="p-8 md:p-12 lg:p-16 bg-gradient-to-br from-indigo-900 to-[#5c3373] text-white relative">
-            <div className="absolute inset-0 opacity-15 bg-[url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div>
-            <div className="relative z-10 max-w-2xl">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white/90 text-xs font-medium px-3 py-1.5 rounded-full mb-6">
-                <BookOpen className="w-3.5 h-3.5" /> Tài liệu hướng dẫn
-              </div>
-              <h1 className="font-serif text-3xl md:text-5xl font-bold mb-4 leading-tight">{course.title}</h1>
-              {course.instructor && <div className="text-indigo-200 mb-6 flex items-center gap-2"><User className="w-4 h-4"/> Đơn vị thực hiện: <span className="text-white font-medium">{course.instructor}</span></div>}
-              <p className="text-indigo-100 text-lg leading-relaxed mb-8">{course.description || "Tài liệu này được biên soạn nhằm hỗ trợ người dân dễ dàng tiếp cận và hoàn thành các thủ tục hành chính trực tuyến tại nhà."}</p>
-              <div className="flex flex-wrap items-center gap-4">
-                <button onClick={enrollNow} disabled={enrollBusy} className="bg-rose-500 hover:bg-rose-600 text-white px-8 py-3.5 rounded-xl font-medium text-lg transition-all shadow-lg shadow-rose-500/30 flex items-center gap-2">
-                  {enrollBusy ? "Đang xử lý..." : "Lưu vào Thư viện của tôi"} <ArrowRight className="w-5 h-5"/>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12 bg-white">
-            <div>
-              <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-6 flex items-center gap-2">
-                <ListOrdered className="w-6 h-6 text-rose-500" /> Các bước thực hiện
-              </h3>
-              <div className="space-y-3">
-                {course.lessons.map((l, i) => (
-                  <div key={l.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-900 flex items-center justify-center text-xs font-bold">{i+1}</div>
-                      <span className="text-sm font-medium text-gray-800">{l.title}</span>
-                    </div>
-                    <Lock className="w-4 h-4 text-gray-400" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-6 flex items-center gap-2">
-                <MessageSquare className="w-6 h-6 text-rose-500" /> Phản hồi từ người dân
-              </h3>
-              <div className="space-y-4">
-                {mockReviews.map(r => (
-                  <div key={r.id} className="p-5 rounded-2xl border border-rose-100 bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-rose-100 flex items-center justify-center text-indigo-900 font-bold">{r.user.charAt(0)}</div>
-                        <div>
-                          <div className="text-sm font-bold text-gray-800">{r.user}</div>
-                          <div className="text-xs text-gray-500">{r.date}</div>
-                        </div>
-                      </div>
-                      <div className="flex text-amber-400">
-                        {Array.from({length: 5}).map((_, idx) => (
-                          <Star key={idx} className={`w-4 h-4 ${idx < r.rating ? 'fill-current' : 'text-gray-300'}`} />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 leading-relaxed">"{r.comment}"</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : course ? (
+      {course ? (
         <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-6">
           <div className="flex flex-col gap-6">
             <div className="rounded-2xl border border-rose-100 bg-white overflow-hidden shadow-sm">
@@ -524,17 +373,6 @@ export default function Page() {
                   <div className="text-xs font-semibold text-rose-500 uppercase tracking-wider mb-1">Đang theo dõi</div>
                   <div className="font-serif text-indigo-900 text-2xl font-bold">{activeLesson?.title || "Bước thực hiện"}</div>
                 </div>
-                <button 
-                  onClick={markLessonComplete} 
-                  disabled={progressBusy || activeIndex < maxUnlockedIndex} 
-                  className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 ${
-                    activeIndex < maxUnlockedIndex 
-                      ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed' 
-                      : 'bg-indigo-900 text-white hover:bg-indigo-800 shadow-md'
-                  }`}
-                >
-                  {activeIndex < maxUnlockedIndex ? <><CheckCircle2 className="w-4 h-4"/> Đã hoàn thành</> : 'Hoàn thành & Tiếp tục'}
-                </button>
               </div>
               
               {/* Tabs */}
@@ -580,6 +418,25 @@ export default function Page() {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* RECOMMENDED VIDEOS */}
+            <div className="mt-6 mb-4">
+              <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-4 px-2">Video đề xuất</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {recommendedVideos.map(v => (
+                  <Link to={`/courses/${v.id}`} key={v.id} className="group flex gap-3 bg-white rounded-xl border border-rose-100 p-3 hover:shadow-md transition-all">
+                    <div className="w-32 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 relative">
+                      <img src={v.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <div className="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">{v.duration}</div>
+                    </div>
+                    <div className="flex flex-col py-1">
+                      <h4 className="text-sm font-bold text-indigo-900 line-clamp-2 group-hover:text-rose-600 transition-colors leading-snug">{v.title}</h4>
+                      <div className="mt-auto text-xs text-gray-500">{v.views} lượt xem</div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

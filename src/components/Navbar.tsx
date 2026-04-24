@@ -52,7 +52,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-rose-100">
       <div className="mx-auto flex h-16 items-center justify-between px-6">
-        <Link href="/" className="text-indigo-900 text-lg tracking-tight font-serif">
+        <Link to="/" className="text-indigo-900 text-lg tracking-tight font-serif">
           Tuổi trẻ <span className="text-rose-400 font-bold uppercase text-sm ml-1 tracking-wider">Xuân Đông</span>
         </Link>
         <ul className="hidden md:flex items-stretch gap-1">
