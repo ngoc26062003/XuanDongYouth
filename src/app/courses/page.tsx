@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Search, Star, Play } from "lucide-react";
 
@@ -119,7 +119,7 @@ export default function Page() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredCourses.map((c) => (
-          <Link href={`/courses/${c.id}`} key={c.id} className="group flex flex-col bg-white rounded-2xl border border-rose-100 overflow-hidden hover:shadow-xl hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
+          <Link to={`/courses/${c.id}`} key={c.id} className="group flex flex-col bg-white rounded-2xl border border-rose-100 overflow-hidden hover:shadow-xl hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
             <div className={`h-32 flex items-center justify-center text-5xl relative overflow-hidden bg-gradient-to-br ${c.gradient}`}>
                 <span className="z-0 drop-shadow-sm">{c.emoji}</span>
                 {c.imageUrl && <img src={c.imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-10" onError={(e) => e.currentTarget.style.display = 'none'} />}

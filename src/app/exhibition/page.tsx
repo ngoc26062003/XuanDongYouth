@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Search, MapPin, Heart } from "lucide-react";
 
 export default function Page() {
@@ -121,7 +121,7 @@ export default function Page() {
                 <p className="text-sm text-gray-600 line-clamp-3 mb-5 leading-relaxed">{shop.desc}</p>
                 <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-xs font-medium text-gray-500 bg-gray-50 px-2.5 py-1.5 rounded-lg"><MapPin className="h-3.5 w-3.5 text-rose-400" />{shop.location}</span>
-                  <Link href={`/exhibition/${shop.id}`} className="text-xs font-semibold text-white bg-indigo-900 px-4 py-2 rounded-lg hover:bg-indigo-800 transition-colors shadow-sm">Xem gian hàng</Link>
+                  <Link to={`/exhibition/${shop.id}`} className="text-xs font-semibold text-white bg-indigo-900 px-4 py-2 rounded-lg hover:bg-indigo-800 transition-colors shadow-sm">Xem gian hàng</Link>
                 </div>
               </div>
             </div>

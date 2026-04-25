@@ -1,8 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, MessageCircleHeart, ThumbsUp } from "lucide-react";
 import { ReactNode } from "react";
 import { useMemo, useState } from "react";
@@ -41,7 +40,7 @@ export default function StoryPanel({
   href,
 }: StoryPanelProps) {
   const g = headerGradient ?? gradient;
-  const router = useRouter();
+  const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [myReaction, setMyReaction] = useState<"like" | "clap" | "love" | null>(null);
 
@@ -56,7 +55,7 @@ export default function StoryPanel({
     const userRes = await supabase.auth.getUser();
     const user = userRes.data.user;
     if (!user) {
-      router.push(`/login?next=${encodeURIComponent(href || `/stories/${storyId}`)}`);
+      navigate(`/login?next=${encodeURIComponent(href || `/stories/${storyId}`)}`);
       setBusy(false);
       return;
     }
@@ -173,7 +172,7 @@ export default function StoryPanel({
 
             {href ? (
               <Link
-                href={href}
+                to={href}
                 className="inline-flex items-center gap-2 text-xs font-medium text-indigo-900 hover:text-rose-500 transition-colors"
               >
                 Đọc tiếp →
@@ -183,7 +182,7 @@ export default function StoryPanel({
         ) : href ? (
           <div className="mt-3">
             <Link
-              href={href}
+              to={href}
               className="inline-flex items-center gap-2 text-xs font-medium text-indigo-900 hover:text-rose-500 transition-colors"
             >
               Đọc tiếp →

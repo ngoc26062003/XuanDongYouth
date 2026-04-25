@@ -1,7 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { ReactNode, useState } from "react";
 
 type CourseCardProps = {
@@ -37,14 +37,14 @@ export default function CourseCard({
   description,
   ctaText = "Đăng ký",
 }: CourseCardProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
   async function onEnroll() {
     if (busy) return;
     if (!courseId) {
-      router.push("/courses");
+      navigate("/courses");
       return;
     }
 
@@ -54,7 +54,7 @@ export default function CourseCard({
     const userRes = await supabase.auth.getUser();
     const user = userRes.data.user;
     if (!user) {
-      router.push(`/login?next=${encodeURIComponent(`/courses/${courseId}`)}`);
+      navigate(`/login?next=${encodeURIComponent(`/courses/${courseId}`)}`);
       setBusy(false);
       return;
     }

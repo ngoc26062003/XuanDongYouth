@@ -1,8 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, HeartOff, MapPin } from "lucide-react";
 import { ReactNode, useState } from "react";
 
@@ -33,7 +32,7 @@ export default function BoothCard({
   imageUrl,
   href,
 }: BoothCardProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [isLiked, setLiked] = useState(liked);
   const [busy, setBusy] = useState(false);
   const displayTitle = title ?? name ?? "";
@@ -50,7 +49,7 @@ export default function BoothCard({
     const userRes = await supabase.auth.getUser();
     const user = userRes.data.user;
     if (!user) {
-      router.push(`/login?next=${encodeURIComponent(`/exhibition/${boothId}`)}`);
+      navigate(`/login?next=${encodeURIComponent(`/exhibition/${boothId}`)}`);
       setBusy(false);
       return;
     }
@@ -125,7 +124,7 @@ export default function BoothCard({
         )}
         {href ? (
           <Link
-            href={href}
+            to={href}
             className="inline-flex items-center rounded-md bg-indigo-900 text-white px-3 py-1 text-xs font-medium hover:bg-indigo-800"
           >
             Xem chi tiết

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { 
   ArrowRight, 
   MapPin,
@@ -89,17 +89,17 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link 
-                href="/exhibition" 
+              to="/exhibition" 
                 className="bg-coral text-white px-8 py-4 rounded-full text-base font-medium hover:translate-y-[-2px] hover:shadow-lg hover:shadow-coral/40 transition-all flex items-center gap-2"
               >
                 ✦ Hoạt động thanh niên
               </Link>
-              <Link 
-                href="#courses" 
+            <a 
+              href="#courses" 
                 className="bg-transparent text-white border border-white/30 px-8 py-4 rounded-full text-base font-medium hover:bg-white/10 transition-all flex items-center gap-2"
               >
                 Vào thư viện số <ArrowRight size={18} />
-              </Link>
+            </a>
             </div>
           </div>
 
@@ -145,7 +145,7 @@ export default function Home() {
             <div className="flex gap-6 overflow-x-auto pb-4 snap-x scrollbar-hide">
               {featuredShops.map((shop) => (
                 <Link 
-                  href={shop.link || `/exhibition/${shop.id}`} 
+                  to={shop.link || `/exhibition/${shop.id}`} 
                   target={shop.link ? "_blank" : undefined}
                   rel={shop.link ? "noopener noreferrer" : undefined}
                   key={shop.id} 
@@ -189,7 +189,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {featuredCourses.map((c) => (
             <Link 
-              href={`/courses/${c.id}`} 
+              to={`/courses/${c.id}`} 
               key={c.id} 
               className="group flex flex-col bg-white rounded-2xl border border-rose-100 overflow-hidden hover:shadow-xl hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1"
             >
@@ -227,7 +227,7 @@ export default function Home() {
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Lịch trình</div>
                 <h2 className="font-serif text-3xl text-navy">Sự kiện & Hoạt động sắp diễn ra</h2>
               </div>
-              <Link href="/activities" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
+              <Link to="/activities" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
                 Xem tất cả →
               </Link>
             </div>
@@ -265,7 +265,7 @@ export default function Home() {
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-1">Tin tức & Phong trào</div>
                 <h2 className="font-serif text-2xl text-navy leading-tight">Hoạt động nổi bật</h2>
               </div>
-              <Link href="/stories" className="text-sm font-medium text-blush border-b border-blush-mid pb-0.5 hover:text-navy transition-colors shrink-0">
+              <Link to="/stories" className="text-sm font-medium text-blush border-b border-blush-mid pb-0.5 hover:text-navy transition-colors shrink-0">
                 Đọc thêm →
               </Link>
             </div>

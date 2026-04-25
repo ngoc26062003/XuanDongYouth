@@ -1,8 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 function safeNext(value: string | null): string {
@@ -13,8 +12,8 @@ function safeNext(value: string | null): string {
 }
 
 export default function Page() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const nextPath = useMemo(
     () => safeNext(searchParams.get("next")),
@@ -31,13 +30,13 @@ export default function Page() {
     async function check() {
       const res = await supabase.auth.getUser();
       if (cancelled) return;
-      if (res.data.user) router.replace(nextPath);
+      if (res.data.user) navigate(nextPath, { replace: true });
     }
     check().catch(() => {});
     return () => {
       cancelled = true;
     };
-  }, [router, nextPath]);
+  }, [navigate, nextPath]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -57,7 +56,7 @@ export default function Page() {
         return;
       }
 
-      router.replace(nextPath);
+      navigate(nextPath, { replace: true });
     } catch (err: any) {
       if (err instanceof TypeError && err?.message?.includes("Failed to fetch")) {
         setError("Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng hoặc cấu hình biến môi trường.");
@@ -134,7 +133,7 @@ export default function Page() {
           <div className="text-xs text-muted leading-5">
             Chưa có tài khoản?{" "}
             <Link
-              href={`/register?next=${encodeURIComponent(nextPath)}`}
+              to={`/register?next=${encodeURIComponent(nextPath)}`}
               className="text-blush hover:text-navy transition-colors"
             >
               Đăng ký
@@ -147,11 +146,11 @@ export default function Page() {
           </div>
 
           <div className="pt-2 flex items-center justify-between text-xs">
-            <Link href="/" className="text-mid hover:text-navy transition-colors">
+            <Link to="/" className="text-mid hover:text-navy transition-colors">
               Về trang chủ
             </Link>
             <Link
-              href={nextPath || "/"}
+              to={nextPath || "/"}
               className="text-blush hover:text-navy transition-colors"
             >
               Quay lại

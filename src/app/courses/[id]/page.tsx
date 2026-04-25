@@ -1,8 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ListOrdered, Play, Lock, CheckCircle2, Star, Clock } from "lucide-react";
 
@@ -225,7 +224,7 @@ const MOCK_VIDEOS = [
 ];
 
 export default function Page() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const params = useParams();
   const id = params?.id as string;
 
@@ -329,7 +328,7 @@ export default function Page() {
       <div className="mb-8">
         <div className="flex flex-col gap-2">
           <Link
-          href="/courses"
+          to="/courses"
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-900"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -429,7 +428,7 @@ export default function Page() {
                 <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-4 px-2">Video đề xuất</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {recommendedVideos.map(v => (
-                    <Link href={`/courses/${v.id}`} key={v.id} className="group flex gap-3 bg-white rounded-xl border border-rose-100 p-3 hover:shadow-md transition-all">
+                    <Link to={`/courses/${v.id}`} key={v.id} className="group flex gap-3 bg-white rounded-xl border border-rose-100 p-3 hover:shadow-md transition-all">
                       <>
                         <div className="w-32 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 relative">
                           <img src={v.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
