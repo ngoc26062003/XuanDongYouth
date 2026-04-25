@@ -274,11 +274,11 @@ export default function Home() {
             <div className="flex flex-col gap-4 w-full">
               {/* Nhúng Timeline của Fanpage */}
               <div className="w-full flex justify-center bg-white rounded-xl overflow-hidden border border-rose-100 shadow-sm">
-                <FacebookPageEmbed url="https://www.facebook.com/oantnxuantay" height="850" />
+                <FacebookPageEmbed url="https://www.facebook.com/profile.php?id=61581374665009" height="850" />
               </div>
 
               <a 
-                href="https://www.facebook.com/oantnxuantay" 
+                href="https://www.facebook.com/profile.php?id=61581374665009" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#0866ff] hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-sm hover:shadow-md mt-2"
