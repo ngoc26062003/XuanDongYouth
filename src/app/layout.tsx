@@ -1,28 +1,7 @@
-import type { Metadata } from "next";
-import { Cormorant_Garamond, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MessageCircle } from "lucide-react";
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "600"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const beVietnam = Be_Vietnam_Pro({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-be-vietnam",
-  display: "swap",
-});
-
-export const metadata: Metadata = {
-  title: "FHB — For Her Business",
-  description: "Nền tảng hỗ trợ phụ nữ khởi nghiệp số",
-};
 
 export default function RootLayout({
   children,
@@ -30,11 +9,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="vi"
-      className={`${cormorant.variable} ${beVietnam.variable} h-full antialiased font-sans`}
-    >
-      <body className="min-h-full flex flex-col bg-ivory">
+    <div className="h-full antialiased font-sans font-be-vietnam">
+      <div className="min-h-full flex flex-col bg-ivory">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
@@ -49,7 +25,7 @@ export default function RootLayout({
         >
           <MessageCircle size={28} />
         </a>
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }

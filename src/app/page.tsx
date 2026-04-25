@@ -137,9 +137,10 @@ export default function Home() {
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Sản phẩm thanh niên</div>
                 <h2 className="font-serif text-3xl text-navy">Mô hình kinh tế tiêu biểu</h2>
               </div>
-              <Link href="/exhibition" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
+              {/* <Link to="/exhibition" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
                 Xem tất cả →
-              </Link>
+              </Link> */} 
+              
             </div>
             
             <div className="flex gap-6 overflow-x-auto pb-4 snap-x scrollbar-hide">

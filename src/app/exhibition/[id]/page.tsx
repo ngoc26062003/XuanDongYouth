@@ -1,6 +1,5 @@
 "use client";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { Link, useParams } from "react-router-dom";
 import { useMemo } from "react";
 import { ArrowLeft, MapPin, MessageCircle, Star, ShoppingCart, Store, CheckCircle2, Image as ImageIcon } from "lucide-react";
 
@@ -138,7 +137,7 @@ export default function ShopDetail() {
         <img src={shop.imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover z-10" onError={(e) => e.currentTarget.style.display = 'none'} />
         <div className="absolute inset-0 bg-black/40 z-20"></div>
         <div className="max-w-6xl mx-auto px-6 pt-6 relative z-30 w-full">
-          <Link href="/exhibition" className="inline-flex items-center gap-2 text-white hover:text-white bg-black/30 hover:bg-black/40 backdrop-blur px-4 py-2 rounded-full text-sm font-medium transition-all border border-white/20">
+          <Link to="/exhibition" className="inline-flex items-center gap-2 text-white hover:text-white bg-black/30 hover:bg-black/40 backdrop-blur px-4 py-2 rounded-full text-sm font-medium transition-all border border-white/20">
             <ArrowLeft className="h-4 w-4" /> Quay lại Triển lãm
           </Link>
         </div>
