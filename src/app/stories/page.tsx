@@ -1,3 +1,5 @@
+"use client";
+
 import StoryPanel from "@/components/StoryPanel";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useMemo, useState } from "react";

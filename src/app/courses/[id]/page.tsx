@@ -1,5 +1,8 @@
+"use client";
+
 import { supabase } from "@/lib/supabase";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ListOrdered, Play, Lock, CheckCircle2, MessageSquare, Star, User, BookOpen, Clock, ArrowRight } from "lucide-react";
 
@@ -215,19 +218,16 @@ const mockReviews = [
 ];
 
 const MOCK_VIDEOS = [
-  { id: "c1", title: "Tạo tài khoản Dịch vụ công bằng VNeID", tag: "Tài khoản", views: 1240, duration: "10 phút", imageUrl: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?q=80&w=600&auto=format&fit=crop" },
-  { id: "c2", title: "Thủ tục Đăng ký khai sinh trực tuyến", tag: "Hộ tịch", views: 870, duration: "15 phút", imageUrl: "https://images.unsplash.com/photo-1555252113-d5fc399e5251?q=80&w=600&auto=format&fit=crop" },
-  { id: "c3", title: "Đăng ký kết hôn trên cổng DVC Quốc gia", tag: "Hộ tịch", views: 520, duration: "20 phút", imageUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=600&auto=format&fit=crop" },
-  { id: "c4", title: "Hướng dẫn thanh toán lệ phí an toàn", tag: "Lệ phí", views: 1560, duration: "8 phút", imageUrl: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=600&auto=format&fit=crop" },
-  { id: "c5", title: "Thanh toán nghĩa vụ tài chính về đất đai", tag: "Đất đai", views: 940, duration: "12 phút", imageUrl: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=80&w=600&auto=format&fit=crop" },
-  { id: "c6", title: "Cấp lại, đổi thẻ BHYT do mất/hỏng", tag: "Bảo hiểm", views: 620, duration: "15 phút", imageUrl: "https://images.unsplash.com/photo-1512413913411-209258957864?q=80&w=600&auto=format&fit=crop" },
-  { id: "c7", title: "Thủ tục xin cấp Phiếu Lý lịch tư pháp", tag: "Khác", views: 3420, duration: "18 phút", imageUrl: "https://images.unsplash.com/photo-1556742031-c6961e85bb06?q=80&w=600&auto=format&fit=crop" }
+  { id: "x_-gWKYVAwM", title: "Hướng dẫn đăng ký kết hôn trực tuyến MỚI NHẤT 2026", tag: "Hướng dẫn", views: 1240, duration: "10 phút", imageUrl: "https://i.ytimg.com/vi/x_-gWKYVAwM/hqdefault.jpg" },
+  { id: "7Qfjr-MPZ-8", title: "Hướng dẫn đổi giấy phép lái xe ô tô online MỚI NHẤT", tag: "Hướng dẫn", views: 870, duration: "8 phút", imageUrl: "https://i.ytimg.com/vi/7Qfjr-MPZ-8/hqdefault.jpg" },
+  { id: "JBHfnwni0hI", title: "Hướng cập nhật số tài khoản ngân hàng lên VNeID", tag: "Lệ phí", views: 1560, duration: "5 phút", imageUrl: "https://i.ytimg.com/vi/JBHfnwni0hI/hqdefault.jpg" },
+  { id: "g0yPx1KwfMg", title: "Hướng dẫn Đăng ký tạm trú trên Cổng Dịch vụ công 2026", tag: "Hướng dẫn", views: 940, duration: "12 phút", imageUrl: "https://i.ytimg.com/vi/g0yPx1KwfMg/hqdefault.jpg" }
 ];
 
 export default function Page() {
-  const navigate = useNavigate();
-  const params = useParams<{ id: string }>();
-  const id = params?.id;
+  const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
 
   const [course, setCourse] = useState<CourseVm | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -266,14 +266,16 @@ export default function Page() {
           title: mock.title,
           description: "Video hướng dẫn thực hiện thủ tục hành chính trực tuyến tại Cổng Dịch vụ công. Bạn có thể xem từng bước để hoàn thành hồ sơ một cách nhanh chóng và chính xác.",
           instructor: "Tổ Công Nghệ Số Cộng Đồng",
-          videoUrl: "https://www.youtube.com/watch?v=dBzERaXwSco&t=1217s",
+          videoUrl: `https://www.youtube.com/watch?v=${id}`,
           imageUrl: mock.imageUrl,
-          lessons: Array.from({ length: 8 }).map((_, i) => ({
-            id: `lesson-${i+1}`,
-            title: `Bước ${i+1}: ${['Chuẩn bị hồ sơ', 'Đăng nhập hệ thống', 'Điền tờ khai trực tuyến', 'Đính kèm tài liệu', 'Kiểm tra thông tin', 'Thanh toán lệ phí', 'Nộp hồ sơ', 'Tra cứu kết quả'][i]}`,
-            duration: `0${Math.floor(Math.random() * 3 + 2)}:${Math.floor(Math.random() * 50 + 10)}`,
-            videoUrl: "https://www.youtube.com/watch?v=dBzERaXwSco&t=1217s"
-          }))
+          lessons: [
+            {
+              id: "lesson-1",
+              title: "Xem video hướng dẫn chi tiết",
+              duration: mock.duration,
+              videoUrl: `https://www.youtube.com/watch?v=${id}`
+            }
+          ]
         };
         setCourse(vm);
         setActiveLessonId(vm.lessons[0]?.id ?? null);
@@ -327,7 +329,7 @@ export default function Page() {
       <div className="mb-8">
         <div className="flex flex-col gap-2">
           <Link
-          to="/courses"
+          href="/courses"
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-900"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -344,171 +346,175 @@ export default function Page() {
 
       {course ? (
         <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-6">
-          <div className="flex flex-col gap-6">
-            <div className="rounded-2xl border border-rose-100 bg-white overflow-hidden shadow-sm">
-            <div className="bg-black">
-              <div className="aspect-video w-full">
-                {youtubeEmbed ? (
-                  <iframe
-                    className="h-full w-full"
-                    src={youtubeEmbed}
-                    title={course.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : videoUrl ? (
-                  <video className="h-full w-full" src={videoUrl} controls />
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center text-white/80">
-                    <div className="flex items-center gap-2">
-                      <Play className="h-5 w-5" />
-                      Chưa có video cho bước này
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-              <div className="p-5 border-b border-gray-100 flex flex-wrap items-center justify-between bg-white gap-4">
-                <div>
-                  <div className="text-xs font-semibold text-rose-500 uppercase tracking-wider mb-1">Đang theo dõi</div>
-                  <div className="font-serif text-indigo-900 text-2xl font-bold">{activeLesson?.title || "Bước thực hiện"}</div>
-                </div>
-              </div>
-              
-              {/* Tabs */}
-              <div className="flex gap-8 px-6 bg-gray-50 border-b border-gray-200">
-                <button onClick={() => setActiveTab('intro')} className={`py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'intro' ? 'border-indigo-900 text-indigo-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Thông tin chung</button>
-                <button onClick={() => setActiveTab('reviews')} className={`py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'reviews' ? 'border-indigo-900 text-indigo-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Bình luận ({mockReviews.length})</button>
-              </div>
-
-              {/* Tab Content */}
-              <div className="p-6">
-                {activeTab === 'intro' && (
-                  <div className="prose prose-sm max-w-none text-gray-600">
-                    <p className="leading-relaxed">{course.description || "Video hướng dẫn này sẽ giúp bạn dễ dàng hoàn thiện hồ sơ trên cổng dịch vụ công mà không cần phải đến trực tiếp ủy ban."}</p>
-                    {course.instructor && (
-                      <div className="mt-6 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-900 font-bold text-lg">{course.instructor.charAt(0)}</div>
-                        <div>
-                          <div className="text-xs text-indigo-500 font-semibold uppercase tracking-wider mb-0.5">Đơn vị biên soạn</div>
-                          <div className="font-bold text-indigo-900">{course.instructor}</div>
+          <>
+            <div className="flex flex-col gap-6">
+              <div className="rounded-2xl border border-rose-100 bg-white overflow-hidden shadow-sm">
+                <div className="bg-black">
+                  <div className="aspect-video w-full">
+                    {youtubeEmbed ? (
+                      <iframe
+                        className="h-full w-full"
+                        src={youtubeEmbed}
+                        title={course.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : videoUrl ? (
+                      <video className="h-full w-full" src={videoUrl} controls />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-white/80">
+                        <div className="flex items-center gap-2">
+                          <Play className="h-5 w-5" />
+                          Chưa có video cho bước này
                         </div>
                       </div>
                     )}
                   </div>
-                )}
-                {activeTab === 'reviews' && (
-                  <div className="space-y-4">
-                    {mockReviews.map(r => (
-                      <div key={r.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-900 font-bold text-xs">{r.user.charAt(0)}</div>
-                          <div>
-                            <div className="text-sm font-bold text-gray-800">{r.user}</div>
-                            <div className="flex text-amber-400">
-                              {Array.from({length: 5}).map((_, idx) => (
-                                <Star key={idx} className={`w-3 h-3 ${idx < r.rating ? 'fill-current' : 'text-gray-300'}`} />
-                              ))}
-                            </div>
-                          </div>
-                          <span className="ml-auto text-xs text-gray-400">{r.date}</span>
-                        </div>
-                        <p className="text-sm text-gray-600 ml-11">{r.comment}</p>
-                      </div>
-                    ))}
+                </div>
+                <div className="p-5 border-b border-gray-100 flex flex-wrap items-center justify-between bg-white gap-4">
+                  <div>
+                    <div className="text-xs font-semibold text-rose-500 uppercase tracking-wider mb-1">Đang theo dõi</div>
+                    <div className="font-serif text-indigo-900 text-2xl font-bold">{activeLesson?.title || "Bước thực hiện"}</div>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* RECOMMENDED VIDEOS */}
-            <div className="mt-6 mb-4">
-              <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-4 px-2">Video đề xuất</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {recommendedVideos.map(v => (
-                  <Link to={`/courses/${v.id}`} key={v.id} className="group flex gap-3 bg-white rounded-xl border border-rose-100 p-3 hover:shadow-md transition-all">
-                    <div className="w-32 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 relative">
-                      <img src={v.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      <div className="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">{v.duration}</div>
-                    </div>
-                    <div className="flex flex-col py-1">
-                      <h4 className="text-sm font-bold text-indigo-900 line-clamp-2 group-hover:text-rose-600 transition-colors leading-snug">{v.title}</h4>
-                      <div className="mt-auto text-xs text-gray-500">{v.views} lượt xem</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-rose-100 bg-white overflow-hidden shadow-sm h-fit sticky top-24">
-            <div className="p-5 border-b border-rose-100 flex items-center justify-between bg-gradient-to-r from-rose-50 to-white">
-              <div className="flex items-center gap-2 text-indigo-900 font-bold text-lg font-serif">
-                <ListOrdered className="h-5 w-5 text-rose-500" />
-                Các bước chi tiết
-              </div>
-              <div className="text-xs font-medium text-rose-600 bg-rose-100 px-2 py-1 rounded-md">
-                {course.lessons.length} bước
-              </div>
-            </div>
-            
-            <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50">
-              <div className="flex justify-between text-xs text-indigo-900 font-semibold mb-2">
-                <span>Tiến trình theo dõi</span>
-                <span className="text-emerald-600">{enrollmentProgress}%</span>
-              </div>
-              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 transition-all duration-500" style={{width: `${enrollmentProgress}%`}}></div>
-              </div>
-            </div>
-
-            <div className="p-3 overflow-y-auto max-h-[60vh] space-y-1">
-                {course.lessons.map((lesson, index) => {
-                  const active = lesson.id === activeLessonId;
-                const isLocked = index > maxUnlockedIndex;
-                const isCompleted = index < maxUnlockedIndex;
+                </div>
                 
-                  return (
-                    <button
-                      key={lesson.id}
-                      type="button"
-                    disabled={isLocked}
-                    onClick={() => selectLesson(lesson.id, index)}
-                      className={
-                      "w-full text-left rounded-xl px-4 py-3 transition-all flex items-center gap-3 " +
-                        (active
-                        ? "bg-indigo-50 border border-indigo-100 shadow-sm"
-                        : isLocked 
-                          ? "opacity-50 cursor-not-allowed hover:bg-transparent border border-transparent"
-                          : "hover:bg-gray-50 border border-transparent")
-                      }
-                    >
-                    <div className="shrink-0">
-                      {isCompleted ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                      ) : active ? (
-                        <Play className="w-5 h-5 text-indigo-600 fill-indigo-600" />
-                      ) : isLocked ? (
-                        <Lock className="w-5 h-5 text-gray-400" />
-                      ) : (
-                        <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className={`font-medium truncate ${active ? 'text-indigo-900 font-bold' : isLocked ? 'text-gray-500' : 'text-gray-700'}`}>
-                        {index + 1}. {lesson.title}
-                      </div>
-                      {lesson.duration && (
-                        <div className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> {lesson.duration}
+                {/* Tabs */}
+                <div className="flex gap-8 px-6 bg-gray-50 border-b border-gray-200">
+                  <button onClick={() => setActiveTab('intro')} className={`py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'intro' ? 'border-indigo-900 text-indigo-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Thông tin chung</button>
+                  <button onClick={() => setActiveTab('reviews')} className={`py-4 text-sm font-semibold border-b-2 transition-colors ${activeTab === 'reviews' ? 'border-indigo-900 text-indigo-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Bình luận ({mockReviews.length})</button>
+                </div>
+
+                {/* Tab Content */}
+                <div className="p-6">
+                  {activeTab === 'intro' && (
+                    <div className="prose prose-sm max-w-none text-gray-600">
+                      <p className="leading-relaxed">{course.description || "Video hướng dẫn này sẽ giúp bạn dễ dàng hoàn thiện hồ sơ trên cổng dịch vụ công mà không cần phải đến trực tiếp ủy ban."}</p>
+                      {course.instructor && (
+                        <div className="mt-6 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-900 font-bold text-lg">{course.instructor.charAt(0)}</div>
+                          <div>
+                            <div className="text-xs text-indigo-500 font-semibold uppercase tracking-wider mb-0.5">Đơn vị biên soạn</div>
+                            <div className="font-bold text-indigo-900">{course.instructor}</div>
+                          </div>
                         </div>
                       )}
                     </div>
-                    </button>
-                  );
-                })}
+                  )}
+                  {activeTab === 'reviews' && (
+                    <div className="space-y-4">
+                      {mockReviews.map(r => (
+                        <div key={r.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-900 font-bold text-xs">{r.user.charAt(0)}</div>
+                            <div>
+                              <div className="text-sm font-bold text-gray-800">{r.user}</div>
+                              <div className="flex text-amber-400">
+                                {Array.from({length: 5}).map((_, idx) => (
+                                  <Star key={idx} className={`w-3 h-3 ${idx < r.rating ? 'fill-current' : 'text-gray-300'}`} />
+                                ))}
+                              </div>
+                            </div>
+                            <span className="ml-auto text-xs text-gray-400">{r.date}</span>
+                          </div>
+                          <p className="text-sm text-gray-600 ml-11">{r.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* RECOMMENDED VIDEOS */}
+              <div className="mt-6 mb-4">
+                <h3 className="font-serif text-2xl font-bold text-indigo-900 mb-4 px-2">Video đề xuất</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {recommendedVideos.map(v => (
+                    <Link href={`/courses/${v.id}`} key={v.id} className="group flex gap-3 bg-white rounded-xl border border-rose-100 p-3 hover:shadow-md transition-all">
+                      <>
+                        <div className="w-32 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0 relative">
+                          <img src={v.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <div className="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded z-20">{v.duration}</div>
+                        </div>
+                        <div className="flex flex-col py-1">
+                          <h4 className="text-sm font-bold text-indigo-900 line-clamp-2 group-hover:text-rose-600 transition-colors leading-snug">{v.title}</h4>
+                          <div className="mt-auto text-xs text-gray-500">{v.views} lượt xem</div>
+                        </div>
+                      </>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+
+            <div className="rounded-2xl border border-rose-100 bg-white overflow-hidden shadow-sm h-fit sticky top-24">
+              <div className="p-5 border-b border-rose-100 flex items-center justify-between bg-gradient-to-r from-rose-50 to-white">
+                <div className="flex items-center gap-2 text-indigo-900 font-bold text-lg font-serif">
+                  <ListOrdered className="h-5 w-5 text-rose-500" />
+                  Các bước chi tiết
+                </div>
+                <div className="text-xs font-medium text-rose-600 bg-rose-100 px-2 py-1 rounded-md">
+                  {course.lessons.length} bước
+                </div>
+              </div>
+              
+              <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50">
+                <div className="flex justify-between text-xs text-indigo-900 font-semibold mb-2">
+                  <span>Tiến trình theo dõi</span>
+                  <span className="text-emerald-600">{enrollmentProgress}%</span>
+                </div>
+                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-emerald-500 transition-all duration-500" style={{width: `${enrollmentProgress}%`}}></div>
+                </div>
+              </div>
+
+              <div className="p-3 overflow-y-auto max-h-[60vh] space-y-1">
+                  {course.lessons.map((lesson, index) => {
+                    const active = lesson.id === activeLessonId;
+                  const isLocked = index > maxUnlockedIndex;
+                  const isCompleted = index < maxUnlockedIndex;
+                  
+                    return (
+                      <button
+                        key={lesson.id}
+                        type="button"
+                      disabled={isLocked}
+                      onClick={() => selectLesson(lesson.id, index)}
+                        className={
+                        "w-full text-left rounded-xl px-4 py-3 transition-all flex items-center gap-3 " +
+                          (active
+                          ? "bg-indigo-50 border border-indigo-100 shadow-sm"
+                          : isLocked 
+                            ? "opacity-50 cursor-not-allowed hover:bg-transparent border border-transparent"
+                            : "hover:bg-gray-50 border border-transparent")
+                        }
+                      >
+                      <div className="shrink-0">
+                        {isCompleted ? (
+                          <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        ) : active ? (
+                          <Play className="w-5 h-5 text-indigo-600 fill-indigo-600" />
+                        ) : isLocked ? (
+                          <Lock className="w-5 h-5 text-gray-400" />
+                        ) : (
+                          <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className={`font-medium truncate ${active ? 'text-indigo-900 font-bold' : isLocked ? 'text-gray-500' : 'text-gray-700'}`}>
+                          {index + 1}. {lesson.title}
+                        </div>
+                        {lesson.duration && (
+                          <div className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
+                            <Clock className="w-3 h-3" /> {lesson.duration}
+                          </div>
+                        )}
+                      </div>
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+          </>
         </div>
       ) : null}
     </div>

@@ -1,5 +1,8 @@
+"use client";
+
 import { supabase } from "@/lib/supabase";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Heart, MessageCircleHeart, ThumbsUp } from "lucide-react";
 
@@ -78,9 +81,9 @@ function toStoryVm(r: StoryRow): StoryVm {
 }
 
 export default function Page() {
-  const navigate = useNavigate();
-  const params = useParams<{ id: string }>();
-  const id = params?.id;
+  const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
 
   const [story, setStory] = useState<StoryVm | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -150,7 +153,7 @@ export default function Page() {
     const userRes = await supabase.auth.getUser();
     const user = userRes.data.user;
     if (!user) {
-      navigate(`/login?next=${encodeURIComponent(`/stories/${id}`)}`);
+      router.push(`/login?next=${encodeURIComponent(`/stories/${id}`)}`);
       setBusy(false);
       return;
     }
@@ -195,7 +198,7 @@ export default function Page() {
     <div className="px-6 py-8">
       <div className="mb-5">
         <Link
-          to="/stories"
+          href="/stories"
           className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-900"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -307,7 +310,7 @@ export default function Page() {
               </div>
               <div className="px-5 pb-5">
                 <Link
-                  to="/stories"
+                  href="/stories"
                   className="inline-flex items-center rounded-xl bg-indigo-900 text-white px-4 py-2 text-sm font-medium hover:bg-indigo-800 transition"
                 >
                   Xem thêm câu chuyện

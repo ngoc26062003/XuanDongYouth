@@ -1,7 +1,8 @@
-import { supabase } from "@/lib/supabase";
-import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import { Search, Star } from "lucide-react";
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { Search, Star, Play } from "lucide-react";
 
 type CourseVm = {
   id: string;
@@ -21,100 +22,61 @@ export default function Page() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("Tất cả");
 
-  const filters = ["Tất cả", "Tài khoản", "Hộ tịch", "Đất đai", "Bảo hiểm", "Lệ phí", "Khác"];
+  const filters = ["Tất cả", "Hướng dẫn", "Lệ phí"];
 
   const courses = useMemo<CourseVm[]>(
     () => [
       {
-        id: "c1",
-        tag: "Tài khoản",
-        title: "Tạo tài khoản Dịch vụ công bằng VNeID",
-        description: "Hướng dẫn chi tiết từng bước cách đăng nhập và tạo tài khoản DVC Quốc gia thông qua ứng dụng VNeID.",
-        lessonsCount: 3,
+        id: "x_-gWKYVAwM",
+        tag: "Hướng dẫn",
+        title: "Hướng dẫn đăng ký kết hôn trực tuyến MỚI NHẤT 2026",
+        description: "Quy trình nộp hồ sơ xin cấp giấy chứng nhận kết hôn trực tuyến trên Cổng DVC.",
+        lessonsCount: 1,
         duration: "10 phút",
         students: 1240,
         rating: 5.0,
-        emoji: "🤖",
-        gradient: "from-indigo-100 to-rose-100",
-        imageUrl: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=600&auto=format&fit=crop"
+        emoji: "💕",
+        gradient: "from-rose-100 to-amber-50",
+        imageUrl: "https://i.ytimg.com/vi/x_-gWKYVAwM/hqdefault.jpg"
       },
       {
-        id: "c2",
-        tag: "Hộ tịch",
-        title: "Thủ tục Đăng ký khai sinh trực tuyến",
-        description: "Video hướng dẫn điền tờ khai điện tử và đính kèm hồ sơ hợp lệ để đăng ký khai sinh cho trẻ mới sinh.",
-        lessonsCount: 4,
-        duration: "15 phút",
+        id: "7Qfjr-MPZ-8",
+        tag: "Hướng dẫn",
+        title: "Hướng dẫn đổi giấy phép lái xe ô tô online MỚI NHẤT",
+        description: "Hướng dẫn chi tiết cách nộp hồ sơ đổi giấy phép lái xe ô tô trực tuyến nhanh chóng.",
+        lessonsCount: 1,
+        duration: "8 phút",
         students: 870,
         rating: 4.8,
-        emoji: "⚡",
-        gradient: "from-amber-100 to-orange-100",
-        imageUrl: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?q=80&w=600&auto=format&fit=crop"
+        emoji: "🚗",
+        gradient: "from-blue-100 to-indigo-100",
+        imageUrl: "https://i.ytimg.com/vi/7Qfjr-MPZ-8/hqdefault.jpg"
       },
       {
-        id: "c3",
-        tag: "Hộ tịch",
-        title: "Đăng ký kết hôn trên cổng DVC Quốc gia",
-        description: "Quy trình nộp hồ sơ xin cấp giấy chứng nhận kết hôn dành cho công dân cư trú tại xã.",
-        lessonsCount: 5,
-        duration: "20 phút",
+        id: "JBHfnwni0hI",
+        tag: "Lệ phí",
+        title: "Hướng cập nhật số tài khoản ngân hàng lên VNeID",
+        description: "Cách liên kết tài khoản ngân hàng vào ứng dụng VNeID để nhận các khoản trợ cấp an sinh xã hội.",
+        lessonsCount: 1,
+        duration: "5 phút",
         students: 520,
         rating: 4.9,
-        emoji: "📣",
-        gradient: "from-rose-100 to-amber-50",
-        imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=600&auto=format&fit=crop"
+        emoji: "🏦",
+        gradient: "from-emerald-100 to-teal-100",
+        imageUrl: "https://i.ytimg.com/vi/JBHfnwni0hI/hqdefault.jpg"
       },
       {
-        id: "c4",
-        tag: "Lệ phí",
-        title: "Hướng dẫn thanh toán lệ phí an toàn",
-        description: "Cách sử dụng ngân hàng số, Momo hoặc VNPay để thanh toán biên lai lệ phí hành chính công.",
-        lessonsCount: 2,
-        duration: "8 phút",
-        students: 1560,
-        rating: 4.7,
-        emoji: "🛒",
-        gradient: "from-blue-100 to-indigo-100",
-        imageUrl: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=600&auto=format&fit=crop"
-      },
-      {
-        id: "c5",
-        tag: "Đất đai",
-        title: "Thanh toán nghĩa vụ tài chính về đất đai",
-        description: "Thao tác tra cứu và thanh toán thuế, lệ phí trước bạ khi làm thủ tục chuyển nhượng quyền sử dụng đất.",
-        lessonsCount: 3,
+        id: "g0yPx1KwfMg",
+        tag: "Hướng dẫn",
+        title: "Hướng dẫn Đăng ký tạm trú trên Cổng Dịch vụ công năm 2026",
+        description: "Thao tác đăng ký tạm trú trực tuyến cho công dân đến nơi ở mới mà không cần ra công an phường/xã.",
+        lessonsCount: 1,
         duration: "12 phút",
         students: 940,
         rating: 4.7,
-        emoji: "📊",
-        gradient: "from-emerald-100 to-teal-100",
-        imageUrl: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=80&w=600&auto=format&fit=crop"
-      },
-      {
-        id: "c6",
-        tag: "Bảo hiểm",
-        title: "Cấp lại, đổi thẻ BHYT do mất/hỏng",
-        description: "Hướng dẫn đề nghị cơ quan BHXH cấp lại thẻ Bảo hiểm y tế trực tuyến gửi về tận nhà.",
-        lessonsCount: 4,
-        duration: "15 phút",
-        students: 620,
-        rating: 4.9,
-        emoji: "📸",
-        gradient: "from-pink-100 to-rose-100",
-        imageUrl: "https://images.unsplash.com/photo-1512413913411-209258957864?q=80&w=600&auto=format&fit=crop"
-      },
-      {
-        id: "c7",
-        tag: "Khác",
-        title: "Thủ tục xin cấp Phiếu Lý lịch tư pháp",
-        description: "Quy trình khai báo và xin cấp Phiếu lý lịch tư pháp hoàn toàn qua mạng internet.",
-        lessonsCount: 5,
-        duration: "18 phút",
-        students: 3420,
-        rating: 4.9,
-        emoji: "📦",
+        emoji: "🏠",
         gradient: "from-orange-100 to-rose-100",
-        imageUrl: "https://images.unsplash.com/photo-1556742031-c6961e85bb06?q=80&w=600&auto=format&fit=crop"
+        imageUrl: "https://i.ytimg.com/vi/g0yPx1KwfMg/hqdefault.jpg"
       }
     ],
     []
@@ -122,7 +84,7 @@ export default function Page() {
 
   const filteredCourses = courses.filter((c) => {
     const matchFilter = activeFilter === "Tất cả" || c.tag === activeFilter;
-    const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) || c.description.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = (c.title || "").toLowerCase().includes(search.toLowerCase()) || (c.description || "").toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 
@@ -157,10 +119,13 @@ export default function Page() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredCourses.map((c) => (
-          <Link to={`/courses/${c.id}`} key={c.id} className="group flex flex-col bg-white rounded-2xl border border-rose-100 overflow-hidden hover:shadow-xl hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
+          <Link href={`/courses/${c.id}`} key={c.id} className="group flex flex-col bg-white rounded-2xl border border-rose-100 overflow-hidden hover:shadow-xl hover:shadow-rose-100/50 transition-all duration-300 hover:-translate-y-1">
             <div className={`h-32 flex items-center justify-center text-5xl relative overflow-hidden bg-gradient-to-br ${c.gradient}`}>
                 <span className="z-0 drop-shadow-sm">{c.emoji}</span>
                 {c.imageUrl && <img src={c.imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-10" onError={(e) => e.currentTarget.style.display = 'none'} />}
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors z-20 flex items-center justify-center">
+                  <div className="w-12 h-12 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg"><Play className="w-5 h-5 text-white fill-white ml-1" /></div>
+                </div>
             </div>
             <div className="p-5 flex flex-col flex-1">
               <div className="text-[10px] font-semibold text-rose-500 tracking-wider uppercase mb-2">{c.tag}</div>

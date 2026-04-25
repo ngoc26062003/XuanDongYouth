@@ -1,5 +1,8 @@
+"use client";
+
 import { supabase } from "@/lib/supabase";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 function safeNext(value: string | null): string {
@@ -10,8 +13,8 @@ function safeNext(value: string | null): string {
 }
 
 export default function Page() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const nextPath = useMemo(
     () => safeNext(searchParams.get("next")),
@@ -28,7 +31,7 @@ export default function Page() {
     async function check() {
       const res = await supabase.auth.getUser();
       if (cancelled) return;
-      if (res.data.user) navigate(nextPath, { replace: true });
+      if (res.data.user) router.replace(nextPath);
     }
     check().catch(() => {});
     return () => {
@@ -54,7 +57,7 @@ export default function Page() {
         return;
       }
 
-      navigate(nextPath, { replace: true });
+      router.replace(nextPath);
     } catch (err: any) {
       if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
         setError("Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng hoặc cấu hình biến môi trường.");
@@ -131,7 +134,7 @@ export default function Page() {
           <div className="text-xs text-muted leading-5">
             Chưa có tài khoản?{" "}
             <Link
-              to={`/register?next=${encodeURIComponent(nextPath)}`}
+              href={`/register?next=${encodeURIComponent(nextPath)}`}
               className="text-blush hover:text-navy transition-colors"
             >
               Đăng ký
@@ -144,11 +147,11 @@ export default function Page() {
           </div>
 
           <div className="pt-2 flex items-center justify-between text-xs">
-            <Link to="/" className="text-mid hover:text-navy transition-colors">
+            <Link href="/" className="text-mid hover:text-navy transition-colors">
               Về trang chủ
             </Link>
             <Link
-              to={nextPath || "/"}
+              href={nextPath || "/"}
               className="text-blush hover:text-navy transition-colors"
             >
               Quay lại
