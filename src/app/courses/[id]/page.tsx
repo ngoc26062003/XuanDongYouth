@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ListOrdered, Play, Lock, CheckCircle2, MessageSquare, Star, User, BookOpen, Clock, ArrowRight } from "lucide-react";
+import { ArrowLeft, ListOrdered, Play, Lock, CheckCircle2, Star, Clock } from "lucide-react";
 
 type Lesson = {
   id: string;

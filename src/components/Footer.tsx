@@ -1,5 +1,5 @@
 import { Heart, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -14,11 +14,11 @@ export default function Footer() {
         <div className="space-y-2">
           <div className="font-medium text-gray-800">Điều hướng</div>
           <nav className="flex flex-col">
-            <Link to="/" className="hover:text-indigo-900">Trang chủ</Link>
-            <Link to="/courses" className="hover:text-indigo-900">Thư viện số</Link>
-            <Link to="/exhibition" className="hover:text-indigo-900">Sản phẩm thanh niên</Link>
-            <Link to="/activities" className="hover:text-indigo-900">Hoạt động Đoàn</Link>
-            <Link to="/about" className="hover:text-indigo-900">Về chúng tôi</Link>
+            <Link href="/" className="hover:text-indigo-900">Trang chủ</Link>
+            <Link href="/courses" className="hover:text-indigo-900">Thư viện số</Link>
+            <Link href="/exhibition" className="hover:text-indigo-900">Sản phẩm thanh niên</Link>
+            <Link href="/activities" className="hover:text-indigo-900">Hoạt động Đoàn</Link>
+            <Link href="/about" className="hover:text-indigo-900">Về chúng tôi</Link>
           </nav>
         </div>
         <div className="space-y-2">

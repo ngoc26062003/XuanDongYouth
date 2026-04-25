@@ -7,6 +7,7 @@ import {
   Play
 } from "lucide-react";
 import FacebookPageEmbed from "@/components/FacebookPageEmbed";
+import logoImg from "@/lib/logo.png";
 
 const featuredShops = [
   { 
@@ -69,6 +70,12 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 w-full flex flex-col lg:flex-row items-center justify-between gap-12 py-20">
           <div className="max-w-2xl w-full">
+            <img 
+              src={typeof logoImg === 'object' ? (logoImg as any).src : logoImg} 
+              alt="Logo Tuổi trẻ Xuân Đông" 
+              className="h-24 md:h-32 w-auto mb-8 md:mb-10 object-contain drop-shadow-2xl"
+            />
+            
             <div className="inline-flex items-center gap-2 bg-lav/10 border border-lav/20 text-white/80 text-xs font-medium px-4 py-2 rounded-full mb-8 tracking-wide shadow-sm">
               ✦ Tổ công nghệ số cộng đồng
             </div>
@@ -169,9 +176,14 @@ export default function Home() {
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Thư viện số</div>
                 <h2 className="font-serif text-3xl text-navy">Video hướng dẫn Dịch vụ công</h2>
               </div>
-              <Link href="/courses" className="inline-flex items-center gap-1.5 text-sm font-medium text-blush bg-blush/10 px-4 py-2 rounded-full hover:bg-blush hover:text-white transition-all shrink-0">
-                Xem tất cả <ArrowRight size={16} />
-              </Link>
+              <a 
+                href="https://www.youtube.com/@dichvucongonline" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-blush bg-blush/10 px-4 py-2 rounded-full hover:bg-blush hover:text-white transition-all shrink-0"
+              >
+                Xem kênh YouTube <ArrowRight size={16} />
+              </a>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">

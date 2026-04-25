@@ -1,5 +1,8 @@
+"use client";
+
 import { supabase } from "@/lib/supabase";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { LogIn, LogOut, User, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -12,9 +15,8 @@ const links = [
 ];
 
 export default function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location.pathname || "/";
+  const router = useRouter();
+  const pathname = usePathname() || "/";
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -52,7 +54,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-rose-100">
       <div className="mx-auto flex h-16 items-center justify-between px-6">
-        <Link to="/" className="text-indigo-900 text-lg tracking-tight font-serif">
+        <Link href="/" className="text-indigo-900 text-lg tracking-tight font-serif">
           Tuổi trẻ <span className="text-rose-400 font-bold uppercase text-sm ml-1 tracking-wider">Xuân Đông</span>
         </Link>
         <ul className="hidden md:flex items-stretch gap-1">
@@ -64,7 +66,7 @@ export default function Navbar() {
             return (
               <li key={l.href}>
                 <Link
-                  to={l.href}
+                  href={l.href}
                   className={
                     "px-3 text-sm flex items-center border-b-2 " +
                     (active
@@ -82,7 +84,7 @@ export default function Navbar() {
           {signedIn ? (
             <>
               <Link
-                to="/profile"
+                href="/profile"
                 className="inline-flex items-center gap-1 rounded-full border border-rose-300 text-rose-500 px-3 py-1.5 text-xs font-medium hover:bg-rose-400 hover:text-white transition"
               >
                 <User size={16} />
@@ -106,14 +108,14 @@ export default function Navbar() {
           ) : signedIn === false ? (
             <>
               <Link
-                to="/login"
+                href="/login"
                 className="inline-flex items-center gap-1 rounded-full border border-rose-300 text-rose-500 px-3 py-1.5 text-xs font-medium hover:bg-rose-400 hover:text-white transition"
               >
                 <LogIn size={16} />
                 Đăng nhập
               </Link>
               <Link
-                to="/register"
+                href="/register"
                 className="inline-flex items-center gap-1 rounded-full bg-indigo-900 text-white px-3 py-1.5 text-xs font-medium hover:bg-indigo-800 transition"
               >
                 <UserPlus size={16} />

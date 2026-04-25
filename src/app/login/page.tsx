@@ -59,10 +59,10 @@ export default function Page() {
 
       router.replace(nextPath);
     } catch (err: any) {
-      if (err instanceof TypeError && err.message.includes("Failed to fetch")) {
+      if (err instanceof TypeError && err?.message?.includes("Failed to fetch")) {
         setError("Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng hoặc cấu hình biến môi trường.");
       } else {
-        setError(err.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại.");
+        setError(err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại.");
       }
       setBusy(false);
     }
