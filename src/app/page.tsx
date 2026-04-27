@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { 
   ArrowRight, 
@@ -65,6 +66,56 @@ const featuredCourses = [
 ];
 
 export default function Home() {
+  // State lưu trữ danh sách sự kiện, mặc định là dữ liệu cứng
+  const [events, setEvents] = useState([
+    { day: "20", mo: "Th4", title: "Lớp tập huấn Chuyển đổi số cho cán bộ Đoàn", meta: "08:00 – 11:30 · UBND Xã Xuân Đông · 50 người", badge: "Trực tiếp", badgeClass: "bg-blush-lt text-rose-800" },
+    { day: "25", mo: "Th4", title: "Chương trình Tiếp sức Mùa thi 2026", meta: "Cả ngày · Trường THPT địa phương", badge: "Tình nguyện", badgeClass: "bg-emerald-100 text-emerald-800" },
+    { day: "05", mo: "Th5", title: "Lễ kết nạp Đoàn viên mới", meta: "14:00 – 16:00 · Nhà văn hóa xã", badge: "Trực tiếp", badgeClass: "bg-blush-lt text-rose-800" },
+    { day: "19", mo: "Th5", title: "Hành trình về nguồn: Thăm khu di tích lịch sử", meta: "07:00 – 17:00 · Di tích lịch sử cấp Tỉnh", badge: "Hoạt động", badgeClass: "bg-lav-lt text-navy" }
+  ]);
+
+  // Tự động fetch dữ liệu từ Google Sheet khi tải trang
+  useEffect(() => {
+    const sheetId = "12qinX566P7zNZLT3ne1ZgeNSfIhW1bIoKxDCBO9blFU";
+    // Gọi API miễn phí có sẵn của Google Sheets
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+
+    fetch(url)
+      .then(res => res.text())
+      .then(text => {
+        // Trích xuất JSON từ chuỗi trả về của Google
+        const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\);/);
+        if (match && match[1]) {
+          const data = JSON.parse(match[1]);
+          const cols = data.table.cols.map((c: any) => c.label);
+          const isFirstRowHeader = !cols.some((c: string) => c);
+          
+          let headers = cols;
+          let rows = data.table.rows;
+
+          // Xử lý linh hoạt trường hợp dòng đầu tiên chứa tiêu đề cột
+          if (isFirstRowHeader && rows.length > 0) {
+            headers = rows[0].c.map((cell: any) => cell && cell.v !== null ? String(cell.v) : "");
+            rows = rows.slice(1);
+          }
+
+          const newEvents = rows.map((row: any) => {
+            const ev: any = {};
+            row.c.forEach((cell: any, idx: number) => {
+              if (headers[idx]) {
+                ev[headers[idx]] = cell && cell.v !== null ? String(cell.v) : "";
+              }
+            });
+            return ev;
+          });
+
+          if (newEvents.length > 0) {
+            setEvents(newEvents);
+          }
+        }
+      })
+      .catch(err => console.error("Lỗi tải lịch trình từ Google Sheet:", err));
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50/50">
@@ -244,12 +295,7 @@ export default function Home() {
             </div>
             
             <div className="border border-lav-lt rounded-2xl overflow-hidden divide-y divide-lav-lt">
-          {[
-            { day: "20", mo: "Th4", title: "Lớp tập huấn Chuyển đổi số cho cán bộ Đoàn", meta: "08:00 – 11:30 · UBND Xã Xuân Đông · 50 người", badge: "Trực tiếp", badgeClass: "bg-blush-lt text-rose-800" },
-            { day: "25", mo: "Th4", title: "Chương trình Tiếp sức Mùa thi 2026", meta: "Cả ngày · Trường THPT địa phương", badge: "Tình nguyện", badgeClass: "bg-emerald-100 text-emerald-800" },
-            { day: "05", mo: "Th5", title: "Lễ kết nạp Đoàn viên mới", meta: "14:00 – 16:00 · Nhà văn hóa xã", badge: "Trực tiếp", badgeClass: "bg-blush-lt text-rose-800" },
-            { day: "19", mo: "Th5", title: "Hành trình về nguồn: Thăm khu di tích lịch sử", meta: "07:00 – 17:00 · Di tích lịch sử cấp Tỉnh", badge: "Hoạt động", badgeClass: "bg-lav-lt text-navy" }
-          ].map((ev, idx) => (
+          {events.map((ev, idx) => (
             <div key={idx} className="flex items-center gap-6 p-6 hover:bg-ivory transition-colors cursor-pointer group">
               <div className="w-14 h-14 rounded-xl bg-navy-lt flex flex-col items-center justify-center flex-shrink-0 group-hover:bg-lav transition-colors">
                 <span className="font-serif text-2xl font-semibold text-navy leading-none">{ev.day}</span>
