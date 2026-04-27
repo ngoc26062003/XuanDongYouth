@@ -229,42 +229,46 @@ export default function Page() {
   const params = useParams();
   const id = params?.id as string;
 
-  const [course, setCourse] = useState<CourseVm | null>(null);
+  // Khởi tạo state ngay lập tức nếu là video có sẵn để bỏ qua màn hình chờ Skeleton
+  const [course, setCourse] = useState<CourseVm | null>(() => {
+    const mock = MOCK_VIDEOS.find(m => m.id === id);
+    if (mock) {
+      return {
+        id: id as string,
+        title: mock.title,
+        description: "Video hướng dẫn thực hiện thủ tục hành chính trực tuyến tại Cổng Dịch vụ công. Bạn có thể xem từng bước để hoàn thành hồ sơ một cách nhanh chóng và chính xác.",
+        instructor: "Tổ Công Nghệ Số Cộng Đồng",
+        videoUrl: `https://www.youtube.com/watch?v=${id}`,
+        imageUrl: mock.imageUrl,
+        lessons: [
+          {
+            id: "lesson-1",
+            title: "Xem video hướng dẫn chi tiết",
+            duration: mock.duration,
+            videoUrl: `https://www.youtube.com/watch?v=${id}`
+          }
+        ]
+      };
+    }
+    return null;
+  });
   const [error, setError] = useState<string | null>(null);
-  const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
+  const [activeLessonId, setActiveLessonId] = useState<string | null>(() => {
+    return MOCK_VIDEOS.some(m => m.id === id) ? "lesson-1" : null;
+  });
   const [activeTab, setActiveTab] = useState<'intro' | 'reviews'>('intro');
 
   useEffect(() => {
     if (!id) return;
+    
+    // Nếu video đã được set trực tiếp từ MOCK_VIDEOS trong useState, không cần gọi API nữa
+    if (MOCK_VIDEOS.some(m => m.id === id)) return;
+
     let cancelled = false;
 
     async function load() {
       setError(null);
       setCourse(null);
-
-      // Ưu tiên kiểm tra video có sẵn trong dữ liệu mẫu (MOCK_VIDEOS) trước để hiển thị ngay lập tức
-      const mock = MOCK_VIDEOS.find(m => m.id === id);
-      if (mock) {
-        const vm: CourseVm = {
-          id: id as string,
-          title: mock.title,
-          description: "Video hướng dẫn thực hiện thủ tục hành chính trực tuyến tại Cổng Dịch vụ công. Bạn có thể xem từng bước để hoàn thành hồ sơ một cách nhanh chóng và chính xác.",
-          instructor: "Tổ Công Nghệ Số Cộng Đồng",
-          videoUrl: `https://www.youtube.com/watch?v=${id}`,
-          imageUrl: mock.imageUrl,
-          lessons: [
-            {
-              id: "lesson-1",
-              title: "Xem video hướng dẫn chi tiết",
-              duration: mock.duration,
-              videoUrl: `https://www.youtube.com/watch?v=${id}`
-            }
-          ]
-        };
-        setCourse(vm);
-        setActiveLessonId(vm.lessons[0]?.id ?? null);
-        return;
-      }
 
       try {
         const res = await supabase
