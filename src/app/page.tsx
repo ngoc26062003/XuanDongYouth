@@ -27,7 +27,7 @@ const featuredCourses = [
     tag: "Hướng dẫn", 
     title: "Hướng dẫn đăng ký kết hôn trực tuyến MỚI NHẤT 2026", 
     published: "25/04/2026", 
-    views: 100, 
+    views: 104, 
     imageUrl: "https://i.ytimg.com/vi/x_-gWKYVAwM/hqdefault.jpg" 
   },
   { 
@@ -35,7 +35,7 @@ const featuredCourses = [
     tag: "Hướng dẫn", 
     title: "Hướng dẫn đổi giấy phép lái xe ô tô online MỚI NHẤT", 
     published: "22/04/2026", 
-    views: 340, 
+    views: 291000, 
     imageUrl: "https://i.ytimg.com/vi/7Qfjr-MPZ-8/hqdefault.jpg" 
   },
   { 
@@ -43,7 +43,7 @@ const featuredCourses = [
     tag: "Hướng dẫn", 
     title: "Hướng dẫn cập nhật số tài khoản ngân hàng lên ứng dụng VNeID để hưởng an sinh xã hội", 
     published: "18/04/2026", 
-    views: 520, 
+    views: 56, 
     imageUrl: "https://i.ytimg.com/vi/JBHfnwni0hI/hqdefault.jpg" 
   },
   { 
@@ -51,8 +51,16 @@ const featuredCourses = [
     tag: "Hướng dẫn", 
     title: "Hướng dẫn Đăng ký tạm trú trên Cổng Dịch vụ công năm 2026", 
     published: "18/04/2026", 
-    views: 520, 
+    views: 6800, 
     imageUrl: "https://i.ytimg.com/vi/g0yPx1KwfMg/hqdefault.jpg" 
+  },
+  { 
+    id: "Ms0oBxQH0ds", 
+    tag: "Hướng dẫn", 
+    title: "Hướng dẫn tải app và sử dụng Viettel Money", 
+    published: "20/04/2026", 
+    views: 8100, 
+    imageUrl: "https://i.ytimg.com/vi/Ms0oBxQH0ds/hqdefault.jpg" 
   }
 ];
 
@@ -88,12 +96,14 @@ export default function Home() {
               Đoàn thanh niên xã Xuân Đông xung kích vì cộng đồng, đồng hành cùng người dân trong công tác cải cách hành chính và sử dụng dịch vụ công trực tuyến.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link 
-              to="/exhibition" 
+              <a 
+                href="https://dichvucong.gov.vn/p/home/dvc-trang-chu.html"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-coral text-white px-8 py-4 rounded-full text-base font-medium hover:translate-y-[-2px] hover:shadow-lg hover:shadow-coral/40 transition-all flex items-center gap-2"
               >
-                ✦ Hoạt động thanh niên
-              </Link>
+                ✦ Đi đến Cổng Dịch vụ công
+              </a>
             <a 
               href="#courses" 
                 className="bg-transparent text-white border border-white/30 px-8 py-4 rounded-full text-base font-medium hover:bg-white/10 transition-all flex items-center gap-2"

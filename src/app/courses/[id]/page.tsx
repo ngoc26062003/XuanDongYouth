@@ -217,10 +217,11 @@ const mockReviews = [
 ];
 
 const MOCK_VIDEOS = [
-  { id: "x_-gWKYVAwM", title: "Hướng dẫn đăng ký kết hôn trực tuyến MỚI NHẤT 2026", tag: "Hướng dẫn", views: 1240, duration: "10 phút", imageUrl: "https://i.ytimg.com/vi/x_-gWKYVAwM/hqdefault.jpg" },
-  { id: "7Qfjr-MPZ-8", title: "Hướng dẫn đổi giấy phép lái xe ô tô online MỚI NHẤT", tag: "Hướng dẫn", views: 870, duration: "8 phút", imageUrl: "https://i.ytimg.com/vi/7Qfjr-MPZ-8/hqdefault.jpg" },
-  { id: "JBHfnwni0hI", title: "Hướng cập nhật số tài khoản ngân hàng lên VNeID", tag: "Lệ phí", views: 1560, duration: "5 phút", imageUrl: "https://i.ytimg.com/vi/JBHfnwni0hI/hqdefault.jpg" },
-  { id: "g0yPx1KwfMg", title: "Hướng dẫn Đăng ký tạm trú trên Cổng Dịch vụ công 2026", tag: "Hướng dẫn", views: 940, duration: "12 phút", imageUrl: "https://i.ytimg.com/vi/g0yPx1KwfMg/hqdefault.jpg" }
+  { id: "x_-gWKYVAwM", title: "Hướng dẫn đăng ký kết hôn trực tuyến MỚI NHẤT 2026", tag: "Hướng dẫn", views: 104, duration: "10 phút", imageUrl: "https://i.ytimg.com/vi/x_-gWKYVAwM/hqdefault.jpg" },
+  { id: "7Qfjr-MPZ-8", title: "Hướng dẫn đổi giấy phép lái xe ô tô online MỚI NHẤT", tag: "Hướng dẫn", views: 291000, duration: "8 phút", imageUrl: "https://i.ytimg.com/vi/7Qfjr-MPZ-8/hqdefault.jpg" },
+  { id: "JBHfnwni0hI", title: "Hướng cập nhật số tài khoản ngân hàng lên VNeID", tag: "Lệ phí", views: 56, duration: "5 phút", imageUrl: "https://i.ytimg.com/vi/JBHfnwni0hI/hqdefault.jpg" },
+  { id: "g0yPx1KwfMg", title: "Hướng dẫn Đăng ký tạm trú trên Cổng Dịch vụ công 2026", tag: "Hướng dẫn", views: 6800, duration: "12 phút", imageUrl: "https://i.ytimg.com/vi/g0yPx1KwfMg/hqdefault.jpg" },
+  { id: "Ms0oBxQH0ds", title: "Hướng dẫn tải app và sử dụng Viettel Money", tag: "Hướng dẫn", views: 8100, duration: "12 phút", imageUrl: "https://i.ytimg.com/vi/Ms0oBxQH0ds/hqdefault.jpg" }
 ];
 
 export default function Page() {
