@@ -242,25 +242,9 @@ export default function Page() {
       setError(null);
       setCourse(null);
 
-      try {
-        const res = await supabase
-          .from("courses")
-          .select("*")
-          .eq("id", id)
-          .maybeSingle();
-
-        if (cancelled) return;
-
-        if (res.data) {
-          const vm = toCourseVm(res.data as Record<string, unknown>);
-          setCourse(vm);
-          setActiveLessonId(vm.lessons[0]?.id ?? null);
-        } else {
-          throw new Error("No data");
-        }
-      } catch (err) {
-        if (cancelled) return;
-        const mock = MOCK_VIDEOS.find(m => m.id === id) || MOCK_VIDEOS[0];
+      // Ưu tiên kiểm tra video có sẵn trong dữ liệu mẫu (MOCK_VIDEOS) trước để hiển thị ngay lập tức
+      const mock = MOCK_VIDEOS.find(m => m.id === id);
+      if (mock) {
         const vm: CourseVm = {
           id: id as string,
           title: mock.title,
@@ -279,6 +263,28 @@ export default function Page() {
         };
         setCourse(vm);
         setActiveLessonId(vm.lessons[0]?.id ?? null);
+        return;
+      }
+
+      try {
+        const res = await supabase
+          .from("courses")
+          .select("*")
+          .eq("id", id)
+          .maybeSingle();
+
+        if (cancelled) return;
+
+        if (res.data) {
+          const vm = toCourseVm(res.data as Record<string, unknown>);
+          setCourse(vm);
+          setActiveLessonId(vm.lessons[0]?.id ?? null);
+        } else {
+          throw new Error("No data");
+        }
+      } catch (err) {
+        if (cancelled) return;
+        setError("Không thể tải dữ liệu khóa học.");
       }
     }
 

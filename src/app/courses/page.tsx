@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Search, Star, Play } from "lucide-react";
 
@@ -101,7 +101,10 @@ export default function Page() {
     return matchFilter && matchSearch;
   });
 
-  return (
+  // Trang đang rỗng, tự động chuyển hướng về trang chủ
+  return <Navigate to="/" replace />;
+
+  /* return (
     <div className="px-6 py-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-rose-500">Thư viện số</div>
@@ -162,5 +165,5 @@ export default function Page() {
         ))}
       </div>
     </div>
-  );
+  ); */
 }
