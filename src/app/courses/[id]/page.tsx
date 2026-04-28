@@ -339,7 +339,7 @@ export default function Page() {
       <div className="mb-8">
         <div className="flex flex-col gap-2">
           <Link
-          to="/courses"
+          to="/"
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-900"
           >
             <ArrowLeft className="h-4 w-4" />
