@@ -9,6 +9,10 @@ import {
 } from "lucide-react";
 import FacebookPageEmbed from "@/components/FacebookPageEmbed";
 import logoImg from "@/lib/logo.png";
+import img1 from "@/lib/1.jpg";
+import img2 from "@/lib/2.jpg";
+import img3 from "@/lib/3.jpg";
+import img4 from "@/lib/4.jpg";
 
 const featuredShops = [
   { 
@@ -74,6 +78,16 @@ export default function Home() {
     { day: "19", mo: "Th5", title: "Hành trình về nguồn: Thăm khu di tích lịch sử", meta: "07:00 – 17:00 · Di tích lịch sử cấp Tỉnh", badge: "Hoạt động", badgeClass: "bg-lav-lt text-navy" }
   ]);
 
+  const [currentImage, setCurrentImage] = useState(0);
+  const heroImages = [img1, img2, img3, img4];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Tự động fetch dữ liệu từ Google Sheet khi tải trang
   useEffect(() => {
     const sheetId = "12qinX566P7zNZLT3ne1ZgeNSfIhW1bIoKxDCBO9blFU";
@@ -120,27 +134,44 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50/50">
       {/* HERO SECTION */}
-      <section className="relative min-h-[88vh] flex items-center bg-gradient-to-br from-navy via-[#2e3799] to-[#5c3373] overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center bg-navy overflow-hidden">
+        {/* Background Images Slider */}
+        {heroImages.map((img, idx) => (
+          <div
+            key={idx}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              idx === currentImage ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={typeof img === 'object' ? (img as any).src : img}
+              alt={`Background ${idx + 1}`}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        ))}
+        {/* Left-to-right Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/80 to-transparent z-0" />
         {/* Background Gradients */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0 opacity-30 pointer-events-none z-0">
           <div className="absolute top-1/4 right-0 w-[55%] h-[65%] bg-lav/20 blur-[120px] rounded-full" />
           <div className="absolute bottom-1/4 left-0 w-[35%] h-[45%] bg-blush/10 blur-[100px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 w-full flex flex-col lg:flex-row items-center justify-between gap-12 py-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 w-full flex flex-col lg:flex-row items-center justify-between gap-12 py-12">
           <div className="max-w-2xl w-full">
             <img 
               src={typeof logoImg === 'object' ? (logoImg as any).src : logoImg} 
               alt="Logo Tuổi trẻ Xuân Đông" 
-              className="h-24 md:h-32 w-auto mb-8 md:mb-10 object-contain drop-shadow-2xl"
+              className="h-16 md:h-24 w-auto mb-6 md:mb-8 object-contain drop-shadow-2xl"
             />
             
             <div className="inline-flex items-center gap-2 bg-lav/10 border border-lav/20 text-white/80 text-xs font-medium px-4 py-2 rounded-full mb-8 tracking-wide shadow-sm">
               ✦ Tổ công nghệ số cộng đồng
             </div>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white leading-[1.15] mb-6">
+            <h1 className="font-sans font-extrabold text-2xl md:text-3xl lg:text-4xl text-white leading-[1.2] mb-6">
               Tuổi trẻ<br />
-              <em className="text-blush-mid italic font-serif">Xuân Đông</em><br />
+              <em className="text-blush-mid italic">Xuân Đông</em><br />
               tiên phong chuyển đổi số
             </h1>
             <p className="text-lg text-white/80 leading-relaxed mb-10 max-w-xl font-light">
