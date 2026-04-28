@@ -199,7 +199,7 @@ export default function Home() {
           <div className="hidden lg:flex flex-col gap-5 w-full max-w-[320px]">
           {[
             { value: "1,248", label: "Hồ sơ DVC được hỗ trợ", progress: 85 },
-            { value: "45", label: "Đoàn viên nòng cốt" },
+            { value: "1000+", label: "Đoàn viên thanh niên" },
             { value: "100%", label: "Tỷ lệ giải quyết đúng hạn" }
           ].map((kpi, idx) => (
               <div key={idx} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 w-full shadow-xl hover:bg-white/15 transition-colors">
