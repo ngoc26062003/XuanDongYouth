@@ -227,7 +227,7 @@ export default function Home() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Sản phẩm thanh niên</div>
-                <h2 className="font-serif text-3xl text-navy">Mô hình kinh tế tiêu biểu</h2>
+                <h2 className="font-sans text-2xl text-navy font-bold uppercase tracking-wider">Mô hình kinh tế tiêu biểu</h2>
               </div>
               {/* <Link to="/exhibition" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
                 Xem tất cả →
@@ -267,7 +267,7 @@ export default function Home() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Thư viện số</div>
-                <h2 className="font-serif text-3xl text-navy">Video hướng dẫn Dịch vụ công</h2>
+                <h2 className="font-sans text-2xl text-navy font-bold uppercase tracking-wider">Video hướng dẫn Dịch vụ công</h2>
               </div>
               <a 
                 href="https://www.youtube.com/@dichvucongonline" 
@@ -318,7 +318,7 @@ export default function Home() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Lịch trình</div>
-                <h2 className="font-serif text-3xl text-navy">Sự kiện & Hoạt động sắp diễn ra</h2>
+                <h2 className="font-sans text-2xl text-navy font-bold uppercase tracking-wider">Sự kiện & Hoạt động sắp diễn ra</h2>
               </div>
               <Link to="/activities" className="text-sm font-medium text-blush border-b border-blush-mid pb-1 hover:text-navy transition-colors shrink-0">
                 Xem tất cả →
@@ -343,6 +343,32 @@ export default function Home() {
           ))}
             </div>
           </section>
+
+          {/* LOCATION SECTION */}
+          <section className="bg-white rounded-3xl p-6 lg:p-10 shadow-sm border border-rose-100">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-2">Bản đồ</div>
+                <h2 className="font-sans text-2xl text-navy font-bold uppercase tracking-wider">Vị trí văn phòng</h2>
+                <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-rose-500" />
+                  Trung tâm Dịch vụ công Xã Xuân Đông
+                </p>
+              </div>
+            </div>
+            
+            <div className="w-full rounded-2xl overflow-hidden border border-rose-100 shadow-sm h-[400px]">
+              <iframe 
+                src="https://maps.google.com/maps?q=UBND%20x%C3%A3%20Xu%C3%A2n%20%C4%90%C3%B4ng,%20C%E1%BA%A9m%20M%E1%BB%B9,%20%C4%90%E1%BB%93ng%20Nai&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen={true} 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </section>
         </main>
 
         {/* CỘT PHẢI (SIDEBAR - TIN TỨC & PHONG TRÀO) */}
@@ -351,7 +377,7 @@ export default function Home() {
             <div className="flex items-end justify-between mb-6">
               <div>
                 <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-blush mb-1">Tin tức & Phong trào</div>
-                <h2 className="font-serif text-2xl text-navy leading-tight">Hoạt động nổi bật</h2>
+                <h2 className="font-sans text-xl text-navy font-bold uppercase tracking-wider leading-tight">Hoạt động nổi bật</h2>
               </div>
               <Link to="/stories" className="text-sm font-medium text-blush border-b border-blush-mid pb-0.5 hover:text-navy transition-colors shrink-0">
                 Đọc thêm →
